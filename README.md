@@ -1,10 +1,12 @@
-** OssnServices **
+### OssnServices
 
 A set of 50 API endpoints for your OSSN website, which allows you to integrate OSSN into your applications. 
 
-After installing and enabling this component, while still in admin panel go to configure and generate the API key, then follow below method as example to call it.
+[Download](https://github.com/opensource-socialnetwork/OssnServices/archive/master.zip "Download") OssnServices component After installing and enabling this component, while still in admin panel go to configure and generate the API key. 
 
-** API CODES **
+Once installed and you have API KEY, use any of the method avaialble. https://www.opensource-socialnetwork.org/webservices/all
+
+### API CODES
 
 Code   | Description
 ------------ | -------------
@@ -21,8 +23,8 @@ Code   | Description
 
 If you have questions please post them to our community website https://www.opensource-socialnetwork.org/community
 
-** Extend the API with more features **
+### Extend the API with more featureS
 Please see : https://github.com/opensource-socialnetwork/ExtendAPI
 
-** Examples **
+### Examples
 Please see https://www.opensource-socialnetwork.org/webservices/all
