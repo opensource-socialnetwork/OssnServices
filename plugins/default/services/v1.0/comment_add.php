@@ -17,7 +17,7 @@ $comment      = input('comment');
 $type         = input('type', false, 'post');
 $user_guid    = input('uguid');
 
-if(empty($subject_guid) || (empty($comment) && !isset($_FILES['attachment'])) || empty($type) || empty($user_guid)) {
+if(empty($subject_guid) || empty($type) || empty($user_guid)) {
 		$params['OssnServices']->throwError('106', ossn_print('ossnservices:empty:field:one:more'));
 }
 if($type == 'post') {
@@ -32,6 +32,9 @@ if($type == 'entity') {
 				$params['OssnServices']->throwError('200', ossn_print('ossnservices:comment:failed:add'));
 		}
 }
+if(isset($_FILES['image_file']) && !empty($_FILES['image_file'])){
+	$OssnComment->comment_image = 'yes';
+}	
 if($guid = $OssnComment->PostComment($subject_guid, $user_guid, $comment, $type)) {
 		$file          = new OssnFile;
 		$file->type    = 'annotation';
@@ -45,7 +48,7 @@ if($guid = $OssnComment->PostComment($subject_guid, $user_guid, $comment, $type)
 				'gif'
 		));
 		$file->owner_guid = $guid;
-		$file->addFile();
+		$file->addFile(); 
 		$params['OssnServices']->successResponse(array(
 				'comment' => ossn_get_comment($guid),
 				'user' => $params['OssnServices']->setUser(ossn_user_by_guid($user_guid))
