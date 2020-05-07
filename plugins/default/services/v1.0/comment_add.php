@@ -17,7 +17,7 @@ $comment      = input('comment');
 $type         = input('type', false, 'post');
 $user_guid    = input('uguid');
 
-if(empty($subject_guid) || empty($comment) || empty($type) || empty($user_guid)) {
+if(empty($subject_guid) || (empty($comment) && !isset($_FILES['attachment'])) || empty($type) || empty($user_guid)) {
 		$params['OssnServices']->throwError('106', ossn_print('ossnservices:empty:field:one:more'));
 }
 if($type == 'post') {
