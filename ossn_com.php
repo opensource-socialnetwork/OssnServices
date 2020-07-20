@@ -28,6 +28,7 @@ function ossn_services_init() {
 		ossn_add_hook('services', 'wall:list:home:item', 'wall_post_profile_cphoto_services');
 		ossn_add_hook('services', 'wall:list:home:item', 'wall_post_likes_services');
 		ossn_add_hook('services', 'wall:list:home:item', 'wall_post_friends_services');
+		ossn_add_hook('services', 'wall:list:home:item', 'wall_post_total_comments');
 }
 function wall_post_friends_services($hook, $type, $return){
 	if(isset($return['friends']) && !empty($return['friends'])){
@@ -51,6 +52,27 @@ function wall_post_friends_services($hook, $type, $return){
 		}
 	}
 	return $return;
+}
+function wall_post_total_comments($hook, $type, $return){
+			$OssnLikes = new OssnLikes;		
+			$uguid = input('guid');
+			if(isset($return['post']->item_type) && !empty($return['post']->item_type)){
+					$type = 'entity';
+			} else {
+					$type = 'post';
+			}
+			$comments             = new OssnComments;
+			if($type == 'entity') {
+				$count = $comments->countComments($return['post']->item_guid, 'entity');
+			} else {
+				$count = $comments->countComments($return['post']->guid);
+			}
+			if($count > 0){
+				$return['post']->total_comments = $count;	
+			} else {
+				$return['post']->total_comments    = 0;	
+			}
+			return $return;
 }
 function wall_post_likes_services($hook, $type, $return){
 			$OssnLikes = new OssnLikes;		
