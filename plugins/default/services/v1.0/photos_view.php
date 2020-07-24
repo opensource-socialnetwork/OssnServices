@@ -16,7 +16,7 @@ if($photo_guid) {
 		if(isset($photo)) {
 				if(class_exists('OssnLikes')) {
 						$OssnLikes = new OssnLikes;
-						$likes     = $OssnLikes->CountLikes($post->guid, 'entity');
+						$likes     = $OssnLikes->CountLikes($photo->guid, 'entity');
 						if($likes) {
 								$likes_total = $likes;
 						} else {
