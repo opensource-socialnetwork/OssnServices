@@ -66,6 +66,7 @@ class OssnServices {
 								'photos_profile_add',
 								'photos_cover_add',
 								
+								'groups_add',
 								'groups_user_memberof',
 								'groups_view', 
 								'groups_join',

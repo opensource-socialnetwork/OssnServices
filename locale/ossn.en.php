@@ -44,5 +44,7 @@ $en = array(
 			'ossnservices:cannotaddalbum:photo' => 'Can not add photo into album',
 			'ossnservices:cannotaddalbum' => 'Can not able to create album',
 			'ossnservices:cannotdelete:photo' => 'Can not delete photos',
+			'ossnservices:group:create:error' => 'Can not create group!',
+			'ossnservices:oneoremore:invalid:input' => 'One or more input supplied is invalid',
 );
 ossn_register_languages('en', $en);

@@ -1,4 +1,4 @@
-### OssnServices 6.3
+### OssnServices 6.4
 A set of 50 API endpoints for your OSSN website, which allows you to integrate OSSN into your or 3rd party applications. 
 
 [Download](https://github.com/opensource-socialnetwork/OssnServices/archive/master.zip "Download") OssnServices component After installing and enabling this component, while still in admin panel go to configure and generate the API key. 
@@ -22,7 +22,7 @@ Code   | Description
 
 If you have questions please post them to our community website https://www.opensource-socialnetwork.org/community
 
-### Extend the API with more featureS
+### Extend the API with more features
 Please see : https://github.com/opensource-socialnetwork/ExtendAPI
 
 ### Examples
