@@ -9,12 +9,12 @@
  * @link      https://www.opensource-socialnetwork.org/
  */
 $confirm = input('confirm');
-$component = new OssnComponents;
+$setting = new OssnSite;
 if($confirm == 1){
  	$args = array(
 			   'apikey' => (new \Ossn\Component\OssnServices())->genKey(),
 	);
- 	if($component->setSettings('OssnServices', $args)){	
+ 	if($setting->setSetting('com:ossnservices:apikey', $args['apikey'])){	
 				ossn_trigger_message(ossn_print('ossnservices:generated'));
 				redirect(REF);
 	}

@@ -140,10 +140,10 @@ function wall_post_album_photos_services($hook, $type, $return){
  * @return string|boolean
  */
 function ossn_services_apikey() {
-		$component = new OssnComponents;
-		$settings  = $component->getSettings('OssnServices');
-		if(isset($settings->apikey)) {
-				return $settings->apikey;
+		$component = new OssnSite;
+		$settings  = $component->getSettings('com:ossnservices:apikey');
+		if(isset($settings) && !empty($settings)) {
+				return $settings;
 		}
 		return false;
 }
