@@ -24,7 +24,7 @@ if(!$user || !$with) {
 $new  = new OssnMessages;
 $all  = $new->searchMessages(array(
 		'message_from' => $with->guid,
-		'message_to' => $to->guid,
+		'message_to' => $user->guid,
 		'page_limit' => false,
 		'wheres' => 'm.viewed=0',
 ));
