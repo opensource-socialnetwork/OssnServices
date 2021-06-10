@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component xmlns="http://www.opensource-socialnetwork.org/v/3.0">
-    <name>Web Services for your webstie</name>
+    <name>Web Services for your website</name>
     <id>OssnServices</id>
     <author>Core Team</author>
     <description>Allow you to connect your OSSN website to your application.</description>
