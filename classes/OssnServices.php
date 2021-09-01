@@ -38,6 +38,7 @@ class OssnServices {
 								'user_is_friend',
 								'user_add_friend',
 								'user_remove_friend',
+								'user_friend_request_accept',
 								
 								'wall_add',
 								'wall_view',
