@@ -33,10 +33,13 @@ if($user) {
 				'gif'
 		));
 		
-		if($file->addFile()) {
+		if($fileguid = $file->addFile()) {
 				
 				//update user icon time, this time has nothing to do with photo entity time
 				$user->data->icon_time = time();
+			
+				//Default profile picture #1647
+                		$user->data->icon_guid = $fileguid;
 				$user->save();
 				
 				//get a all user photo files
