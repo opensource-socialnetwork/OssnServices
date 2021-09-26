@@ -216,7 +216,11 @@ class OssnServices {
 		 */
 		public function handle($requests) {
 				$version = $requests[0];
-				$request = $requests[1];
+				if(isset($requests[2]) && !empty($requests[2])){
+					$request = $requests[1].'/'.$requests[2];
+				} else {
+					$request = $requests[1];	
+				}
 				$methods = $this->getMethods();
 				
 				if(!isset($methods[$version]) || !ossn_services_apikey()) {
