@@ -49,6 +49,7 @@ class OssnServices {
 								'comments_list',
 								'comment_add',
 								'comment_delete',
+								'comment_edit',
 								
 								'like_add',
 								'unlike_set',
