@@ -18,7 +18,7 @@ class OssnServices {
 		 * @return string
 		 */
 		public static function genKey() {
-				return hash('ripemd256', md5() . microtime() . rand(0, 2));
+				return hash('ripemd256', md5(time()) . microtime() . rand(0, 2));
 		}
 		/**
 		 * Get a list of method for the api 
