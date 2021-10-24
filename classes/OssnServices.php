@@ -3,8 +3,8 @@
  * Open Source Social Network
  *
  * @package   Open Source Social Network
- * @author    Open Social Website Core Team <info@softlab24.com>
- * @copyright © SOFTLAB24 LIMITED
+ * @author    OSSN Core Team <info@openteknik.com>
+ * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
  * @link      https://www.opensource-socialnetwork.org/
  */
@@ -18,7 +18,7 @@ class OssnServices {
 		 * @return string
 		 */
 		public static function genKey() {
-				return hash('ripemd256', md5() . microtime() . rand(0, 2));
+				return hash('ripemd256', md5(time()) . microtime() . rand(0, 2));
 		}
 		/**
 		 * Get a list of method for the api 
@@ -50,6 +50,7 @@ class OssnServices {
 								'comments_list',
 								'comment_add',
 								'comment_delete',
+								'comment_edit',
 								
 								'like_add',
 								'unlike_set',
@@ -217,7 +218,11 @@ class OssnServices {
 		 */
 		public function handle($requests) {
 				$version = $requests[0];
-				$request = $requests[1];
+				if(isset($requests[2]) && !empty($requests[2])){
+					$request = $requests[1].'/'.$requests[2];
+				} else {
+					$request = $requests[1];	
+				}
 				$methods = $this->getMethods();
 				
 				if(!isset($methods[$version]) || !ossn_services_apikey()) {

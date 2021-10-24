@@ -3,8 +3,8 @@
  * Open Source Social Network
  *
  * @package   Open Source Social Network
- * @author    Open Social Website Core Team <info@softlab24.com>
- * @copyright © SOFTLAB24 LIMITED
+ * @author    Open Social Website Core Team <info@openteknik.com>
+ * @copyright © OPENTEKNIK LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
  * @link      https://www.opensource-socialnetwork.org/
  */
@@ -33,10 +33,13 @@ if($user) {
 				'gif'
 		));
 		
-		if($file->addFile()) {
+		if($fileguid = $file->addFile()) {
 				
 				//update user icon time, this time has nothing to do with photo entity time
 				$user->data->icon_time = time();
+			
+				//Default profile picture #1647
+                		$user->data->icon_guid = $fileguid;
 				$user->save();
 				
 				//get a all user photo files
