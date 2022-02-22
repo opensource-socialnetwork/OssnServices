@@ -23,7 +23,7 @@ if($user && com_is_active('OssnWall')){
 	$count = $wall->GetUserPosts($user, array(
 		'count' => true,
 	));
-	$posts = $wall->GetUserPosts($count);
+	$posts = $wall->GetUserPosts($user);
 	
 	//while we have posts we need to show owner details too with each post 
 	if($posts){
