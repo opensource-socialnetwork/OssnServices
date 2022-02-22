@@ -20,8 +20,10 @@ if($guid){
 if($user && com_is_active('OssnWall')){
 	$wall = new OssnWall();
 
-	$count = $wall->GetUserPosts($guid, true);
-	$posts = $wall->GetUserPosts($guid);
+	$count = $wall->GetUserPosts($user, array(
+		'count' => true,
+	));
+	$posts = $wall->GetUserPosts($count);
 	
 	//while we have posts we need to show owner details too with each post 
 	if($posts){
