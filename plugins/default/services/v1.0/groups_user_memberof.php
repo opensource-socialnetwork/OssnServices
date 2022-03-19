@@ -18,6 +18,7 @@ if($user){
 	if($groups){
 		$groupsl = array();
 		foreach($groups as $k => $group){
+				$groupl[$k] = new stdClass();
 				foreach($group as $r => $item){
 					$groupl[$k]->{$r} = $item;	
 				}

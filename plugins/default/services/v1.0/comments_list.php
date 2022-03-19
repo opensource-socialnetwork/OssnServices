@@ -19,12 +19,12 @@ if($page_limit && $page_limit == -1) {
 }
 $type = input('type');
 if(!com_is_active('OssnComments') || !com_is_active('OssnLikes')) {
-		$params['OssnServices']->throwError('201', ossn_print('ossnservices:component:notfound'));		
+		$params['OssnServices']->throwError('201', ossn_print('ossnservices:component:notfound'));
 }
 if(empty($type) || empty($guid)) {
 		$params['OssnServices']->throwError('106', ossn_print('ossnservices:empty:field:one:more'));
 }
-$comments             = new OssnComments;
+$comments             = new OssnComments();
 $comments->page_limit = $page_limit;
 $comments->limit      = input('limit', '', false);
 if($type == 'entity') {
@@ -45,12 +45,19 @@ if($list) {
 				}
 				$list[$key]->user = $params['OssnServices']->setUser($users[$comment->owner_guid]);
 				if(class_exists('OssnLikes')) {
-						$OssnLikes = new OssnLikes;
+						$OssnLikes = new OssnLikes();
 						$likes     = $OssnLikes->CountLikes($comment->id, 'annotation');
 						if($likes) {
+								foreach($OssnLikes->__likes_get_all as $item) {
+										$last_three_icons[$item->subtype] = $item->subtype;
+								}
+								$last_three                       = array_slice($last_three_icons, -3);
+								$list[$key]->last_three_reactions = $last_three;
+
 								$likes_total = $likes;
 						} else {
-								$likes_total = 0;
+								$list[$key]->last_three_reactions = false;
+								$likes_total                      = 0;
 						}
 						$list[$key]->total_likes = $likes_total;
 						if($uguid && $OssnLikes->isLiked($comment->id, $uguid, 'annotation')) {
@@ -61,9 +68,8 @@ if($list) {
 				}
 		}
 		$params['OssnServices']->successResponse(array(
-				'count' => $count,
+				'count'    => $count,
 				'comments' => $list,
-				'offset' => $offset
-				
+				'offset'   => $offset,
 		));
 }

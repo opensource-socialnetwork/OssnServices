@@ -22,7 +22,7 @@ $group 		= ossn_get_group_by_guid($group_guid);
 if(!$group) {
 		$params['OssnServices']->throwError('200', ossn_print('ossnservices:invalidgroup'));
 }
-if($group->owner_guid !== $uguid){
+if($group->owner_guid != $uguid){
 		$params['OssnServices']->throwError('200', ossn_print('ossnservices:invalidowner'));	
 }
 

@@ -81,8 +81,14 @@ function wall_post_likes_services($hook, $type, $return){
 					$OssnLikes = new OssnLikes;
 					$likes = $OssnLikes->CountLikes($return['post']->item_guid, 'entity');
 					if($likes){
+						foreach($OssnLikes->__likes_get_all as $item){
+							$last_three_icons[$item->subtype] = $item->subtype;
+						}
+						$last_three = array_slice($last_three_icons, -3);		
+						$return['post']->last_three_reactions = $last_three;
 						$return['post']->total_likes = $likes;	
 					} else {
+						$return['post']->last_three_reactions = "";
 						$return['post']->total_likes = 0;	
 					}		
 					if($uguid && $OssnLikes->isLiked($return['post']->item_guid, $uguid, 'entity')){
@@ -93,8 +99,14 @@ function wall_post_likes_services($hook, $type, $return){
 			} else {
 					$likes = $OssnLikes->CountLikes($return['post']->guid);
 					if($likes){
+						foreach($OssnLikes->__likes_get_all as $item){
+							$last_three_icons[$item->subtype] = $item->subtype;
+						}
+						$last_three = array_slice($last_three_icons, -3);
+						$return['post']->last_three_reactions = $last_three;
 						$return['post']->total_likes = $likes;	
 					} else {
+						$return['post']->last_three_reactions = "";
 						$return['post']->total_likes = 0;	
 					}
 					if($uguid && $OssnLikes->isLiked($return['post']->guid, $uguid, 'post')){
@@ -128,8 +140,17 @@ function wall_post_album_photos_services($hook, $type, $return){
 								'wheres' => "e.guid IN({$photos_guid})",
 								'page_limit' => 17,
 						));	
+						$album = ossn_get_object($return['post']->item_guid);
+						// < 6.1
+						if($photos){
+							foreach($photos as $photo){
+								$file = str_replace('album/photos/', '', $photo->value);
+								$photo->photo_url  = ossn_site_url("album/getphoto/{$album->guid}/{$file}?size=album");										
+								$results[] = $photo;
+							}
+						}
 						$return['post']->album_photos_wall['photos'] = $photos;
-						$return['post']->album_photos_wall['album']  = ossn_get_object($return['post']->item_guid);
+						$return['post']->album_photos_wall['album']  = $album;
 					}
 			}
 			return $return;

@@ -46,5 +46,7 @@ $en = array(
 			'ossnservices:cannotdelete:photo' => 'Can not delete photos',
 			'ossnservices:group:create:error' => 'Can not create group!',
 			'ossnservices:oneoremore:invalid:input' => 'One or more input supplied is invalid',
+			'ossnservices:like:failed:add' => 'Reaction add failed',
+			'ossnservices:unlike:failed:add' => 'Unlike failed to set',
 );
 ossn_register_languages('en', $en);

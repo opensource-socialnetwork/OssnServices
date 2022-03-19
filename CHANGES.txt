@@ -1,3 +1,6 @@
+OSSN SERVIVES 8.0
+- Fixes the issues due to PHP 8
+
 OSSN SERVICES 7.0
 
 * Default profile picture #1647 #7

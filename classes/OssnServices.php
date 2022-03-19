@@ -87,9 +87,9 @@ class OssnServices {
 								'message_list',
 								'message_recent',
 								'message_new',
-								
-						)
+						),
 				));
+				
 		}
 		/**
 		 * Make sure the key is valid when someone request for API 

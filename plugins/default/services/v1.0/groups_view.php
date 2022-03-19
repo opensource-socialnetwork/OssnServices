@@ -20,17 +20,13 @@ if(!$group) {
 		$params['OssnServices']->throwError('200', ossn_print('ossnservices:invalidgroup'));
 }
 if($user) {
-		$groupsl = array();
-		foreach($group as $r => $item) {
-				$groupl->{$r} = $item;
-		}
-		$groupl->coverurl       = $group->coverURL();
-		$groupl->ismember       = $group->isMember(NULL, $guid);
-		$groupl->request_exists = $group->requestExists($guid, true);
-		$groupl->total_requests = $group->countRequests();
+		$group->coverurl       = $group->coverURL();
+		$group->ismember       = $group->isMember(NULL, $guid);
+		$group->request_exists = $group->requestExists($guid, true);
+		$group->total_requests = $group->countRequests();
 		
 		$params['OssnServices']->successResponse(array(
-				'group' => $groupl
+				'group' => $group
 		));
 } else {
 		$params['OssnServices']->throwError('103', ossn_print('ossnservices:nouser'));
