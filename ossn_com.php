@@ -29,6 +29,18 @@ function ossn_services_init() {
 		ossn_add_hook('services', 'wall:list:home:item', 'wall_post_likes_services');
 		ossn_add_hook('services', 'wall:list:home:item', 'wall_post_friends_services');
 		ossn_add_hook('services', 'wall:list:home:item', 'wall_post_total_comments');
+		if(!ossn_isLoggedin()){	
+			ossn_add_hook('private:network', 'allowed:pages', 'ossn_services_extend_prviatenetwork_pages');
+		}
+}
+function ossn_services_extend_prviatenetwork_pages($hook, $type, $allowed_pages, $params) {
+	//[B] Issue due to private network #14
+	$allowed_pages[0][] = 'api'; 
+	$allowed_pages[1][] = 'post/photo'; 
+	$allowed_pages[1][] = 'comment/staticimage';
+	$allowed_pages[1][] = 'album/getphoto';
+	$allowed_pages[1][] = 'album/getcover';
+	return $allowed_pages;
 }
 function wall_post_friends_services($hook, $type, $return){
 	if(isset($return['friends']) && !empty($return['friends'])){
