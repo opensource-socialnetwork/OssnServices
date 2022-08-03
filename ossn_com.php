@@ -132,12 +132,12 @@ function wall_post_likes_services($hook, $type, $return){
 function wall_post_profile_cphoto_services($hook, $type, $return){
 			if(isset($return['post']->item_type) && !empty($return['post']->item_type)){
 					if($return['post']->item_type == 'profile:photo'){						
-						$image = ossn_get_entity( $return['post']->item_guid);
+						$image = ossn_get_file($return['post']->item_guid);
 						$image = ossn_profile_photo_wall_url($image);
 						$return['post']->profile_photo_url = $image;
 					}
 					if($return['post']->item_type == 'cover:photo'){						
-						$image = ossn_get_entity( $return['post']->item_guid);
+						$image = ossn_get_file( $return['post']->item_guid);
 						$image = ossn_profile_coverphoto_wall_url($image);
 						$return['post']->profile_cover_url = $image;
 					}					
