@@ -32,9 +32,10 @@ if($user && com_is_active('OssnWall')){
 		foreach($posts as $key => $post){
 			$posts[$key] = ossn_wallpost_to_item($post);	
 			$posts[$key]['user'] = $params['OssnServices']->setUser($posts[$key]['user']);
-			if (isset($posts[$key]['image'])) {
-				$posts[$key]['image'] = ossn_add_cache_to_url($posts[$key]['image']);
-			}			
+			//ossn 6.5 adds cache URL by default
+			//if (isset($posts[$key]['image'])) {
+			//	$posts[$key]['image'] = ossn_add_cache_to_url($posts[$key]['image']);
+			//}			
 			$posts[$key] = ossn_call_hook('services', 'wall:list:home:item', false, $posts[$key]);
 		}
 	}
