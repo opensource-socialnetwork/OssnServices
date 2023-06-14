@@ -88,6 +88,11 @@ class OssnServices {
 								'message_recent',
 								'message_new',
 						),
+						'v2.0' => array(
+								'user/block',				
+								'user/unblock',				
+								'user/blocklist',				
+						),
 				));
 				
 		}
