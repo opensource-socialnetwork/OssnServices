@@ -27,8 +27,7 @@ if($photo_guid) {
 								$is_liked_by_user = true;
 						}
 				}
-				$image = str_replace('album/photos/', '', $photo->value);
-				$image = ossn_site_url() . "album/getphoto/{$photo->owner_guid}/{$image}";
+				$image = $photo->getURL();
 				$list  = array(
 						'guid' => $photo->guid,
 						'is_liked_by_user' => $is_liked_by_user,
