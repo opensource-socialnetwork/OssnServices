@@ -1,3 +1,6 @@
+OSSN SERIVES  9.2
+- [B] photos_view if passing a wrong photo_id it shows a wrong result.
+
 OSSN SERVICES 9.1
 
 - Photos URL appeared to be broken

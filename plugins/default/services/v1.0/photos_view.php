@@ -13,7 +13,8 @@ $uguid      = input('uguid');
 if($photo_guid) {
 		$view  = new OssnPhotos;
 		$photo = $view->GetPhoto($photo_guid);
-		if(isset($photo)) {
+		//[B] Photo view shouldn't show a wrong object ID #15
+		if($photo && ($photo->subtype == 'file:ossn:aphoto' || $photo->subtype == 'file:profile:photo' || $photo->subtype == 'file:profile:cover')) {
 				if(class_exists('OssnLikes')) {
 						$OssnLikes = new OssnLikes;
 						$likes     = $OssnLikes->CountLikes($photo->guid, 'entity');
@@ -27,7 +28,10 @@ if($photo_guid) {
 								$is_liked_by_user = true;
 						}
 				}
-				$image = $photo->getURL();
+				$image = false;
+				if($photo){
+					$image = $photo->getURL();
+				}
 				$list  = array(
 						'guid' => $photo->guid,
 						'is_liked_by_user' => $is_liked_by_user,
@@ -35,8 +39,13 @@ if($photo_guid) {
 						'image_url' => $image,
 						'time_created' => $photo->time_created
 				);
+				$album  = false;
+				$object = ossn_get_object($photo->owner_guid);
+				if($object && $object->subtype == 'ossn:album'){
+						$album = $object;
+				}
 				$params['OssnServices']->successResponse(array(
-						'album' => ossn_get_object($photo->owner_guid),
+						'album' => $album,
 						'photo' => $list
 				));
 		}
