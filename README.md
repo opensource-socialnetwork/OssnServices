@@ -1,4 +1,4 @@
-### OssnServices 8.x
+### OssnServices
 A set of 50 API endpoints for your OSSN website, which allows you to integrate OSSN into your or 3rd party applications. 
 
 [Download](https://github.com/opensource-socialnetwork/OssnServices/archive/master.zip "Download") OssnServices component After installing and enabling this component, while still in admin panel go to configure and generate the API key. 
