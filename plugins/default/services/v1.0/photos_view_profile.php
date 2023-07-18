@@ -36,14 +36,7 @@ if($photo_guid) {
 								$is_liked_by_user = true;
 						}
 				}
-				if(preg_match('/photo/', $photo->value)) {
-						$image = str_replace('profile/photo/', '', $photo->value);
-						$image = ossn_site_url() . "album/getphoto/{$photo->owner_guid}/{$image}?type=1";
-				} else {
-						$image = str_replace('profile/cover/', '', $photo->value);
-						$image = ossn_site_url() . "album/getcover/{$photo->owner_guid}/{$image}";
-				}
-
+				$image = $photo->getURL();
 				$list = array(
 						'guid'                 => $photo->guid,
 						'is_liked_by_user'     => $is_liked_by_user,
