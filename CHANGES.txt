@@ -1,4 +1,7 @@
-OSSN SERIVES  9.2
+OSSN SERVICES 9.4
+- Added two more end points wall edit and group delete
+
+OSSN SERVICES  9.2
 - [B] photos_view if passing a wrong photo_id it shows a wrong result.
 
 OSSN SERVICES 9.1
