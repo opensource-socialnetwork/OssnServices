@@ -21,6 +21,8 @@ if(!$group) {
 }
 if($user) {
 		$groupsl = array();
+		$groupl = new stdClass();
+		
 		foreach($group as $r => $item) {
 				$groupl->{$r} = $item;
 		}
