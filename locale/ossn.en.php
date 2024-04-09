@@ -48,5 +48,8 @@ $en = array(
 			'ossnservices:oneoremore:invalid:input' => 'One or more input supplied is invalid',
 			'ossnservices:like:failed:add' => 'Reaction add failed',
 			'ossnservices:unlike:failed:add' => 'Unlike failed to set',
+			
+			'ossnservices:alreadymemebergroup' => 'User is already member',
+			'ossnservices:requestexistsgroup' => 'Group join request already exists',
 );
 ossn_register_languages('en', $en);

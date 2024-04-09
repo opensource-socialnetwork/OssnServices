@@ -27,11 +27,24 @@ if($user) {
 				$groupl->{$r} = $item;
 		}
 		$groupl->coverurl       = $group->coverURL();
+		if($group->isMember($group->guid, $user->guid)){
+			$params['OssnServices']->throwError('200', array(
+						'status' => 'already_member',
+						'error' => ossn_print('ossnservices:alreadymemebergroup'),
+			));
+		}
+		if($group->requestExists($user->guid, $group->guid)){
+			$params['OssnServices']->throwError('200', array(
+						'status' => 'request_exists',
+						'error' => ossn_print('ossnservices:requestexistsgroup'),
+			));
+		}		
 		if($group->sendRequest($user->guid, $group->guid)){
 			$groupl->ismember       = $group->isMember(NULL, $guid);
 			$groupl->request_exists = $group->requestExists($guid, true);
 			$groupl->total_requests = $group->countRequests();			
 			$params['OssnServices']->successResponse(array(
+					'status' => 'success',
 					'group' => $groupl
 			));
 		}
