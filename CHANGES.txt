@@ -1,3 +1,6 @@
+OSSN SERVICES 9.6
+- Added message send v2.0
+
 OSSN SERVICES 9.4
 - Added two more end points wall edit and group delete
 

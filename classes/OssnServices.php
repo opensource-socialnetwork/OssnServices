@@ -95,6 +95,8 @@ class OssnServices {
 								
 								'group/delete',
 								'post/edit',
+								
+								'message/send',
 						),
 				));
 				
