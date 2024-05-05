@@ -1,3 +1,6 @@
+OSSN SERVICES 9.7
+- Fixes messages list not returning attachment
+
 OSSN SERVICES 9.6
 - Added message send v2.0
 

@@ -23,7 +23,7 @@ $with = ossn_user_by_guid($with);
 if(!$user || !$with) {
 		$params['OssnServices']->throwError('200', ossn_print('ossnservices:nouser'));
 }
-$new   = new OssnMessages;
+$new   = new OssnMessages();
 $all   = $new->getWith($user->guid, $with->guid);
 $count = $new->getWith($user->guid, $with->guid, true);
 $list  = false;
@@ -32,7 +32,7 @@ if(isset($markallread) && $markallread == 1) {
 		$new->markViewed($with->guid, $user->guid);
 }
 if($all) {
-		foreach($all as $item) {
+		foreach ($all as $item) {
 				if($item->message_from == $user->guid) {
 						$item->message_from = $params['OssnServices']->setUser($user, true);
 						$item->message_to   = $params['OssnServices']->setUser($with, true);
@@ -40,13 +40,19 @@ if($all) {
 						$item->message_from = $params['OssnServices']->setUser($with, true);
 						$item->message_to   = $params['OssnServices']->setUser($user, true);
 				}
+				if($item->isAttachment()) {
+						unset($item->{'file:attachment'});
+						$item->type_of_attachment = $item->typeOfAttachment();
+						$item->attachment_name    = $item->attachmentName();
+						$item->attachment_url     = $item->attachmentURL();
+				}
 				$item->message = nl2br(ossn_restore_new_lines($item->message));
 				$list[]        = $item;
 		}
 }
 $params['OssnServices']->successResponse(array(
-		'list' => $list,
+		'list'     => $list,
 		'withuser' => $params['OssnServices']->setUser($with, true),
-		'count' => $count,
-		'offset' => $offset
+		'count'    => $count,
+		'offset'   => $offset,
 ));
