@@ -39,7 +39,7 @@ if($id = $send->send($from->guid, $to->guid, $message)) {
 		if($item->isAttachment()){
 			$item->type_of_attachment = $item->typeOfAttachment();	
 			$item->attachment_name    = $item->attachmentName();
-			$item->attachment_url     = $item->attachmentURL();
+			$item->attachment_url     = ossn_services_message_attachment_url($item);
 		}
 		$item->message = nl2br(ossn_restore_new_lines($item->message));		
 		$params['OssnServices']->successResponse($item);

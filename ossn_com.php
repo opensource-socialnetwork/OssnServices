@@ -21,6 +21,7 @@ ossn_register_class(array(
 function ossn_services_init() {
 		ossn_register_com_panel('OssnServices', 'settings');
 		ossn_register_page('api', 'ossn_services_handler');
+		ossn_register_page('messages_attachment_view', 'ossn_services_messages_attachment_handler');
 		if(ossn_isAdminLoggedin()) {
 				ossn_register_action('services/admin/settings', OssnServices . 'actions/settings.php');
 		}
@@ -31,6 +32,24 @@ function ossn_services_init() {
 		ossn_add_hook('services', 'wall:list:home:item', 'wall_post_total_comments');
 		if(!ossn_isLoggedin()) {
 				ossn_add_hook('private:network', 'allowed:pages', 'ossn_services_extend_prviatenetwork_pages');
+		}
+}
+function ossn_services_message_attachment_url($message) {
+		if($message && $message->isAttachment()) {
+				$attachment_name = str_replace('file:', '', $message->attachment_name);
+				$attachment_name = str_replace('image:', '', $attachment_name);
+				//[B] OssnMessages image attachment broken if invalid file name #2339
+				$path_info       = pathinfo($attachment_name);
+				$attachment_name = OssnTranslit::urlize($path_info['filename']);
+				return ossn_site_url("messages_attachment_view/{$message->attachment_guid}/{$attachment_name}.{$path_info['extension']}");
+		}
+}
+function ossn_services_messages_attachment_handler($pages) {
+		$file = ossn_get_file($pages[0]);
+		if($file && $file->type == 'message' && $file->subtype == 'file:attachment') {
+				$file->output();
+		} else {
+				ossn_error_page();
 		}
 }
 function ossn_services_extend_prviatenetwork_pages($hook, $type, $allowed_pages, $params) {
@@ -46,7 +65,7 @@ function wall_post_friends_services($hook, $type, $return) {
 		if(isset($return['friends']) && !empty($return['friends'])) {
 				if($return['friends']) {
 						$services = new Ossn\Component\OssnServices();
-						foreach($return['friends'] as $friend) {
+						foreach ($return['friends'] as $friend) {
 								$user              = ossn_user_by_guid($friend);
 								$return['friends'] = array();
 								if($user) {
@@ -93,7 +112,7 @@ function wall_post_likes_services($hook, $type, $return) {
 				$OssnLikes = new OssnLikes();
 				$likes     = $OssnLikes->CountLikes($return['post']->item_guid, 'entity');
 				if($likes) {
-						foreach($OssnLikes->__likes_get_all as $item) {
+						foreach ($OssnLikes->__likes_get_all as $item) {
 								$last_three_icons[$item->subtype] = $item->subtype;
 						}
 						$last_three                           = array_slice($last_three_icons, -3);
@@ -111,7 +130,7 @@ function wall_post_likes_services($hook, $type, $return) {
 		} else {
 				$likes = $OssnLikes->CountLikes($return['post']->guid);
 				if($likes) {
-						foreach($OssnLikes->__likes_get_all as $item) {
+						foreach ($OssnLikes->__likes_get_all as $item) {
 								$last_three_icons[$item->subtype] = $item->subtype;
 						}
 						$last_three                           = array_slice($last_three_icons, -3);
@@ -156,7 +175,7 @@ function wall_post_album_photos_services($hook, $type, $return) {
 						$album = ossn_get_object($return['post']->item_guid);
 						// < 6.1
 						if($photos) {
-								foreach($photos as $photo) {
+								foreach ($photos as $photo) {
 										$photo->photo_url = $photo->getURL('album');
 										$results[]        = $photo;
 								}
