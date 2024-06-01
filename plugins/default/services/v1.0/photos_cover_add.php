@@ -33,10 +33,12 @@ if($user) {
 				'gif'
 		));
 		
-		if($file->addFile()) {
+		if($fileguid = $file->addFile()) {
 				
 				//update user cover time, this time has nothing to do with photo entity time
 				$user->data->cover_time = time();
+				$user->data->cover_guid = $fileguid;
+				
 				$user->save();
 				
 				$newcover = $file->getFiles();
