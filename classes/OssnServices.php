@@ -91,7 +91,8 @@ class OssnServices {
 						'v2.0' => array(
 								'user/block',				
 								'user/unblock',				
-								'user/blocklist',		
+								'user/blocklist',	
+								'user/delete',
 								
 								'group/delete',
 								'post/edit',
