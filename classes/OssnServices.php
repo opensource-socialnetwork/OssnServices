@@ -98,6 +98,9 @@ class OssnServices {
 								'post/edit',
 								
 								'message/send',
+								'message/new',
+								'message/list',
+								'components/list_enabled',
 						),
 				));
 				
@@ -186,6 +189,15 @@ class OssnServices {
 				if($user && $user->getProfileCover()){
 					$cover = (new \OssnProfile())->getCoverURL($user);
 				}
+				$verified = NULL;
+				if(com_is_active('UserVerified')){
+					if(isset($user->is_verified_user) && $user->is_verified_user == true){
+						$verified = true;	
+					}
+					if($user->canModerate()){
+						$verified = true;
+					}	
+				}
 				if(!$trim){
 					return (object)array(
 						'guid' => $user->guid,
@@ -196,6 +208,7 @@ class OssnServices {
 						'email' => $user->email,
 						'birthdate' => $user->birthdate,
 						'gender' => $user->gender,
+						'is_verified_user' => $verified,
 						'icon' => array(
 							'topbar' => $user->iconURL()->topbar,
 							'smaller' => $user->iconURL()->smaller,			
@@ -211,6 +224,7 @@ class OssnServices {
 						'guid' => $user->guid,
 						'fullname' => $user->fullname,
 						'username' => $user->username,
+						'is_verified_user' => $verified,
 						'icon' => array(
 							'small' => $user->iconURL()->small,
 						),

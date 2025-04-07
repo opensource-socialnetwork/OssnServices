@@ -92,10 +92,15 @@ function wall_post_total_comments($hook, $type, $return) {
 		} else {
 				$type = 'post';
 		}
+		$item_guid = $return['post']->item_guid;
+		if($return['post']->item_type == 'video' && com_is_active('Videos')){
+				$video = ossn_get_video($return['post']->item_guid);
+				$item_guid = $video->file_guid;
+		}				
 		$comments = new OssnComments();
 		if($type == 'entity') {
-				$count = $comments->countComments($return['post']->item_guid, 'entity');
-		} else {
+				$count = $comments->countComments($item_guid, 'entity');
+		} elseif($type = 'post'){
 				$count = $comments->countComments($return['post']->guid);
 		}
 		if($count > 0) {
@@ -105,12 +110,39 @@ function wall_post_total_comments($hook, $type, $return) {
 		}
 		return $return;
 }
+function ossn_services_count_last_three_reactions_total_likes_entity($guid, $uguid, $type = 'entity'){
+				$return = new stdClass();
+				$OssnLikes = new OssnLikes();
+				$likes     = $OssnLikes->CountLikes($guid, $type);
+				if($likes) {
+						foreach ($OssnLikes->__likes_get_all as $item) {
+								$last_three_icons[$item->subtype] = $item->subtype;
+						}
+						$last_three                           = array_slice($last_three_icons, -3);
+						$return->last_three_reactions = $last_three;
+						$return->total_likes          = $likes;
+				} else {
+						$return->last_three_reactions = '';
+						$return->total_likes          = 0;
+				}
+				if($uguid && $OssnLikes->isLiked($guid, $uguid, $type)) {
+						$return->is_liked_by_user = true;
+				} else {
+						$return->is_liked_by_user = false;
+				}	
+				return $return;
+}
 function wall_post_likes_services($hook, $type, $return) {
 		$OssnLikes = new OssnLikes();
 		$uguid     = input('guid');
 		if(isset($return['post']->item_type) && !empty($return['post']->item_type)) {
+				$item_guid = $return['post']->item_guid;
+				if($return['post']->item_type == 'video' && com_is_active('Videos')){
+						$video = ossn_get_video($return['post']->item_guid);
+						$item_guid = $video->file_guid;
+				}		
 				$OssnLikes = new OssnLikes();
-				$likes     = $OssnLikes->CountLikes($return['post']->item_guid, 'entity');
+				$likes     = $OssnLikes->CountLikes($item_guid, 'entity');
 				if($likes) {
 						foreach ($OssnLikes->__likes_get_all as $item) {
 								$last_three_icons[$item->subtype] = $item->subtype;
@@ -122,7 +154,7 @@ function wall_post_likes_services($hook, $type, $return) {
 						$return['post']->last_three_reactions = '';
 						$return['post']->total_likes          = 0;
 				}
-				if($uguid && $OssnLikes->isLiked($return['post']->item_guid, $uguid, 'entity')) {
+				if($uguid && $OssnLikes->isLiked($item_guidd, $uguid, 'entity')) {
 						$return['post']->is_liked_by_user = true;
 				} else {
 						$return['post']->is_liked_by_user = false;

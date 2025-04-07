@@ -1,3 +1,6 @@
+OSSN SERVICES 10.0
+- Added some 2.0 APIs and fixed other code.
+
 OSSN SERVICES 9.8
 - [B] Message attachment 404 page
 

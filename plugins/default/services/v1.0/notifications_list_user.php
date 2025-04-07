@@ -79,7 +79,8 @@ if($owner && com_is_active('OssnNotifications')) {
 									$option['group']['ismember'] = $group->isMember(NULL, $owner_guid);
 								}								
 						}
-						$listp[] = $option;
+						$hook	 = ossn_call_hook('ossn:services', 'notifications_list_user:item', false, $option);
+						$listp[] = $hook;
 				}
 		}
 		$options['count'] = true;

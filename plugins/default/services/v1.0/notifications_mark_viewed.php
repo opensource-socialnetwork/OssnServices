@@ -10,8 +10,10 @@
  */
 
 $guid = input('notification_guid');
+
 if($guid && com_is_active('OssnNotifications')) {
 		$notification = new OssnNotifications;
+		$notification->guid = $guid;
 		if($notification->setViewed($guid)) {
 				$litem  = $notification->getbyGUID($guid);
 				$option = array(
@@ -62,7 +64,8 @@ if($guid && com_is_active('OssnNotifications')) {
 								$option['group']['ismember'] = $group->isMember(NULL, $owner_guid);
 						}
 				}
-				$params['OssnServices']->successResponse($option);
+				$hook	 = ossn_call_hook('ossn:services', 'notifications_mark_viewed:item', false, $option);
+				$params['OssnServices']->successResponse($hook);
 		}
 }
 $params['OssnServices']->throwError('200', ossn_print('ossnservices:notification:cannotmark'));

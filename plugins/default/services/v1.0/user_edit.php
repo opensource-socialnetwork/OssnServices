@@ -62,21 +62,8 @@ if($user) {
 				$last_name,
 				$email
 		);
-		//v5.1 as OssnUser:VerifyPassowrd is private method 
-		$VerifyPassowrd = function($password, $salt, $hash, $algo){
-				switch($algo) {
-						case 'bcrypt':
-						case 'argon2i':
-								return password_verify($password . $salt, $hash);
-								break;
-				}
-				$password = md5($password . $salt);
-				if($password === $hash) {
-						return true;
-				}
-				return false;				
-		};
-		if(empty($old_password) || !empty($old_password) && !$VerifyPassowrd($old_password, $user->salt, $user->password, $user->password_algorithm)){
+
+		if(empty($old_password) || !empty($old_password) && !$user->verifyPassword($old_password, $user->salt, $user->password, $user->password_algorithm)){
 					$params['OssnServices']->throwError('103', ossn_print('ossnservices:invalidoldpassword'));	
 		}		
 		if(!empty($password)) {
