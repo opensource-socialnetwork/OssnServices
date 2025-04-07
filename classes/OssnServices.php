@@ -101,6 +101,7 @@ class OssnServices {
 								'message/new',
 								'message/list',
 								'components/list_enabled',
+								'notification/mark_all_read',
 						),
 				));
 				
