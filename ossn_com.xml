@@ -9,7 +9,12 @@
     <license_url>http://www.opensource-socialnetwork.org/licence</license_url>
     <version>10.0</version>
 	<requires>
-		<type>ossn_version</type>
-		<version>7.0</version>
+		<type>ossn_component</type>
+		<name>OssnServices</name>
+		<version>10.0</version>
+	</requires>
+	<requires>
+		<type>php_extension</type>
+		<name>ionCube Loader</name>
 	</requires>
 </component>

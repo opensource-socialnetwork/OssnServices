@@ -15,8 +15,7 @@ if($album_guid) {
 		if(isset($photos->photos)) {
 				$list = array();
 				foreach($photos->photos as $photo) {
-						$image   = str_replace('album/photos/', '', $photo->value);
-						$image   = ossn_site_url() . "album/getphoto/{$album_guid}/{$image}?size=album";
+						$image   = $photo->getURL('album');
 						$lists[] = array(
 								'guid' => $photo->guid,
 								'image_url' => $image

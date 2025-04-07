@@ -55,9 +55,11 @@ if ($user && $userb) {
 								'limit' => 1,
 								'page_limit' => 1
 						));
+						if($list){
+							$list[0] = arrayObject($list[0], 'OssnPhotos');	
+						}
 						if (isset($list[0]->value)) {
-								$image = str_replace('album/photos/', '', $list[0]->value);
-								$image = ossn_site_url() . "album/getphoto/{$photo->guid}/{$image}?size=small";
+								$image = $list[0]->getURL('album');
 						} else {
 								$image = ossn_site_url() . 'components/OssnPhotos/images/nophoto-album.png';
 						}

@@ -92,15 +92,63 @@ function wall_post_total_comments($hook, $type, $return) {
 		} else {
 				$type = 'post';
 		}
+
 		$item_guid = $return['post']->item_guid;
-		if($return['post']->item_type == 'video' && com_is_active('Videos')){
-				$video = ossn_get_video($return['post']->item_guid);
+		if($return['post']->item_type == 'video' && com_is_active('Videos')) {
+				$video     = ossn_get_video($return['post']->item_guid);
+				$video->{'file:video'} = $video->getFileURL();
+				$video->{'file:cover'} = $video->getCoverURL();
+				
+				$return['post']->video = $video;
 				$item_guid = $video->file_guid;
-		}				
+		}
+
+		if($return['post']->item_type == 'poll:item' && com_is_active('Polls')) {
+				$poll     = ossn_poll_get($return['post']->item_guid);
+				$item_guid = $poll->poll_entity;
+
+				if($poll){
+					$return['post']->poll = $poll;
+					$return['post']->poll->html = ossn_plugin_view('polls/pages/view_main', array(
+								'poll' => $poll,																			  
+					));
+				}
+		}
+		if($return['post']->item_type == 'event' && com_is_active('Events')) {
+				$event_entity = ossn_get_entity($return['post']->item_guid);
+				$event     = ossn_get_event($event_entity->owner_guid);
+				unset($event->{'file:event:photo'});
+				$event->icon_url       = $event->iconURL('master');
+				$event->cl_entity_guid = $return['post']->item_guid;
+				
+				if($event){
+					$return['post']->event = $event;
+				}
+		}
+		if(isset($return['post']->linkPreview) && !empty($return['post']->linkPreview)) {
+				$item         = ossn_get_object($return['post']->linkPreview);
+				$json_default = ossn_plugin_view('linkpreview/item_inner', array(
+						'item' => $item,
+						'guid' => $params['post']->guid,
+				));
+				if(isset($item->twitter_json) || !empty($item->twitter_json)) {
+						$json = json_decode($item->twitter_json, true);
+						if(isset($json['html'])) {
+								$html = ossn_plugin_view('linkpreview/twitter_code', array(
+										'html' => $json['html'],
+								));
+						} else {
+								$json = $json_default;
+						}
+				} else {
+						$json = $json_default;
+				}
+				$return['post']->link_preview_html = $json;
+		}
 		$comments = new OssnComments();
 		if($type == 'entity') {
 				$count = $comments->countComments($item_guid, 'entity');
-		} elseif($type = 'post'){
+		} elseif($type = 'post') {
 				$count = $comments->countComments($return['post']->guid);
 		}
 		if($count > 0) {
@@ -110,55 +158,51 @@ function wall_post_total_comments($hook, $type, $return) {
 		}
 		return $return;
 }
-function ossn_services_count_last_three_reactions_total_likes_entity($guid, $uguid, $type = 'entity'){
-				$return = new stdClass();
-				$OssnLikes = new OssnLikes();
-				$likes     = $OssnLikes->CountLikes($guid, $type);
-				if($likes) {
-						foreach ($OssnLikes->__likes_get_all as $item) {
-								$last_three_icons[$item->subtype] = $item->subtype;
-						}
-						$last_three                           = array_slice($last_three_icons, -3);
-						$return->last_three_reactions = $last_three;
-						$return->total_likes          = $likes;
-				} else {
-						$return->last_three_reactions = '';
-						$return->total_likes          = 0;
+function ossn_services_count_last_three_reactions_total_likes_entity($guid, $uguid, $type = 'entity') {
+		$return    = new stdClass();
+		$OssnLikes = new OssnLikes();
+		$likes     = $OssnLikes->CountLikes($guid, $type);
+		if($likes) {
+				foreach ($OssnLikes->__likes_get_all as $item) {
+						$last_three_icons[$item->subtype] = $item->subtype;
 				}
-				if($uguid && $OssnLikes->isLiked($guid, $uguid, $type)) {
-						$return->is_liked_by_user = true;
-				} else {
-						$return->is_liked_by_user = false;
-				}	
-				return $return;
+				$last_three                   = array_slice($last_three_icons, -3);
+				$return->last_three_reactions = $last_three;
+				$return->total_likes          = $likes;
+		} else {
+				$return->last_three_reactions = '';
+				$return->total_likes          = 0;
+		}
+		if($uguid && $OssnLikes->isLiked($guid, $uguid, $type)) {
+				$return->is_liked_by_user = true;
+		} else {
+				$return->is_liked_by_user = false;
+		}
+		return $return;
 }
 function wall_post_likes_services($hook, $type, $return) {
 		$OssnLikes = new OssnLikes();
 		$uguid     = input('guid');
 		if(isset($return['post']->item_type) && !empty($return['post']->item_type)) {
 				$item_guid = $return['post']->item_guid;
-				if($return['post']->item_type == 'video' && com_is_active('Videos')){
-						$video = ossn_get_video($return['post']->item_guid);
+				if($return['post']->item_type == 'video' && com_is_active('Videos')) {
+						$video     = ossn_get_video($return['post']->item_guid);
 						$item_guid = $video->file_guid;
+				}
+
+				if($return['post']->item_type == 'poll:item' && com_is_active('Polls')) {
+						$poll     = ossn_poll_get($return['post']->item_guid);
+						$item_guid = $poll->poll_entity;
+				}
+				if($return['post']->item_type == 'event' && com_is_active('Events')) {
+						$item_guid = $return['post']->item_guid;
 				}		
-				$OssnLikes = new OssnLikes();
-				$likes     = $OssnLikes->CountLikes($item_guid, 'entity');
-				if($likes) {
-						foreach ($OssnLikes->__likes_get_all as $item) {
-								$last_three_icons[$item->subtype] = $item->subtype;
-						}
-						$last_three                           = array_slice($last_three_icons, -3);
-						$return['post']->last_three_reactions = $last_three;
-						$return['post']->total_likes          = $likes;
-				} else {
-						$return['post']->last_three_reactions = '';
-						$return['post']->total_likes          = 0;
-				}
-				if($uguid && $OssnLikes->isLiked($item_guidd, $uguid, 'entity')) {
-						$return['post']->is_liked_by_user = true;
-				} else {
-						$return['post']->is_liked_by_user = false;
-				}
+				
+				$likes  = ossn_services_count_last_three_reactions_total_likes_entity($item_guid, $uguid, 'entity');
+				$return['post']->is_liked_by_user     = $likes->is_liked_by_user;
+				$return['post']->last_three_reactions = $likes->last_three_reactions;
+				$return['post']->total_likes          = $likes->total_likes;
+
 		} else {
 				$likes = $OssnLikes->CountLikes($return['post']->guid);
 				if($likes) {
