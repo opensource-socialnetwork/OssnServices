@@ -1,6 +1,7 @@
 OSSN SERVICES 11.0
 - Added v2.0/group/add
 - Added support for openteknik marketplace
+- Comments get businesspage object if comments:entity & object and object->container_type == businesspages (polls, events) etc
 
 OSSN SERVICES 10.0
 - Added some 2.0 APIs and fixed other code.

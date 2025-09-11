@@ -34,21 +34,65 @@ if($type == 'entity') {
 		$list  = $comments->GetComments($guid);
 		$count = $comments->countComments($guid);
 }
+function cached_get_entity($guid) {
+		static $cache = array();
+
+		if(!isset($cache[$guid])) {
+				$cache[$guid] = ossn_get_entity($guid);
+		}
+		return $cache[$guid];
+}
+
+function cached_get_object($guid) {
+		static $cache = array();
+
+		if(!isset($cache[$guid])) {
+				$cache[$guid] = ossn_get_object($guid);
+		}
+		return $cache[$guid];
+}
+
+function get_business_page_cached($guid){
+		static $cache = array();
+
+		if(!isset($cache[$guid])) {
+				$cache[$guid] = get_business_page($guid);
+		}
+		return $cache[$guid];	
+}
+
 if($list) {
 		$users = array();
-		foreach($list as $key => $comment) {
+		foreach ($list as $key => $comment) {
 				if(!isset($users[$comment->owner_guid])) {
 						$users[$comment->owner_guid] = ossn_user_by_guid($comment->owner_guid);
 				}
-				if(!$user) {
-						$continue;
+				if(!isset($users[$comment->owner_guid]) || (isset($users[$comment->owner_guid]) && !isset($users[$comment->owner_guid]->guid))) {
+						continue;
+				}
+				if($comment->type == 'comments:entity' && com_is_active('BusinessPage')) {
+						$entity = cached_get_entity($comment->subject_guid);
+						if($entity && $entity->type == 'object') {
+								$object = cached_get_object($entity->owner_guid);
+								if($object && $object->container_type == 'businesspage') {
+										$businesspage = get_business_page_cached($object->container_guid);
+										if($businesspage && $businesspage->owner_guid == $comment->owner_guid) {
+												$comment->businesspage = (object)array(
+														'guid'       => $businesspage->guid,
+														'title'      => $businesspage->title,
+														'owner_guid' => $businesspage->owner_guid,
+														'icon'       => $businesspage->photoURL('smaller'),
+												);
+										}
+								}
+						}
 				}
 				$list[$key]->user = $params['OssnServices']->setUser($users[$comment->owner_guid]);
 				if(class_exists('OssnLikes')) {
 						$OssnLikes = new OssnLikes();
 						$likes     = $OssnLikes->CountLikes($comment->id, 'annotation');
 						if($likes) {
-								foreach($OssnLikes->__likes_get_all as $item) {
+								foreach ($OssnLikes->__likes_get_all as $item) {
 										$last_three_icons[$item->subtype] = $item->subtype;
 								}
 								$last_three                       = array_slice($last_three_icons, -3);
