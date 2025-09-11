@@ -95,34 +95,61 @@ function wall_post_total_comments($hook, $type, $return) {
 
 		$item_guid = $return['post']->item_guid;
 		if($return['post']->item_type == 'video' && com_is_active('Videos')) {
-				$video     = ossn_get_video($return['post']->item_guid);
+				$video                 = ossn_get_video($return['post']->item_guid);
 				$video->{'file:video'} = $video->getFileURL();
 				$video->{'file:cover'} = $video->getCoverURL();
-				
+
 				$return['post']->video = $video;
-				$item_guid = $video->file_guid;
+				$item_guid             = $video->file_guid;
 		}
 
 		if($return['post']->item_type == 'poll:item' && com_is_active('Polls')) {
-				$poll     = ossn_poll_get($return['post']->item_guid);
+				$poll      = ossn_poll_get($return['post']->item_guid);
 				$item_guid = $poll->poll_entity;
 
-				if($poll){
-					$return['post']->poll = $poll;
-					$return['post']->poll->html = ossn_plugin_view('polls/pages/view_main', array(
-								'poll' => $poll,																			  
-					));
+				if($poll) {
+						$return['post']->poll       = $poll;
+						$return['post']->poll->html = ossn_plugin_view('polls/pages/view_main', array(
+								'poll' => $poll,
+						));
+				}
+		}
+		if($return['post']->item_type == 'marketplace:item' && com_is_active('MarketPlace')) {
+				$product   = marketplace_get_product($return['post']->item_guid);
+				$item_guid = $product->cover_guid;
+
+				if($product) {
+						$return['post']->product = $product;
+						$photos                  = $product->getPhotos();
+						$photos_array            = array();
+						if($photos) {
+								foreach ($photos as $photo) {
+										$url            = $product->photoURL($photo, false);
+										$full           = $product->photoURL($photo, true);
+										$html           = "<a data-fancybox='gallery' href='{$full}'><img class='img-thumbnail ossn-photos-wall-item ossn-photo-wall-item-small' src='{$url}' /></a>";
+										$photos_array[] = array(
+												'full' => $full,
+												'html' => $html,
+												'url'  => $url,
+										);
+								}
+								$return['post']->product->photos          = $photos_array;
+								$return['post']->product->category        = new stdClass();
+								$return['post']->product->category->title = $product->getCategory()->title;
+								$return['post']->product->cover           = $product->getCover();
+								unset($product->{"file:marketplace:covers"});
+						}
 				}
 		}
 		if($return['post']->item_type == 'event' && com_is_active('Events')) {
 				$event_entity = ossn_get_entity($return['post']->item_guid);
-				$event     = ossn_get_event($event_entity->owner_guid);
+				$event        = ossn_get_event($event_entity->owner_guid);
 				unset($event->{'file:event:photo'});
 				$event->icon_url       = $event->iconURL('master');
 				$event->cl_entity_guid = $return['post']->item_guid;
-				
-				if($event){
-					$return['post']->event = $event;
+
+				if($event) {
+						$return['post']->event = $event;
 				}
 		}
 		if(isset($return['post']->linkPreview) && !empty($return['post']->linkPreview)) {
@@ -191,18 +218,23 @@ function wall_post_likes_services($hook, $type, $return) {
 				}
 
 				if($return['post']->item_type == 'poll:item' && com_is_active('Polls')) {
-						$poll     = ossn_poll_get($return['post']->item_guid);
+						$poll      = ossn_poll_get($return['post']->item_guid);
 						$item_guid = $poll->poll_entity;
 				}
 				if($return['post']->item_type == 'event' && com_is_active('Events')) {
 						$item_guid = $return['post']->item_guid;
-				}		
-				
-				$likes  = ossn_services_count_last_three_reactions_total_likes_entity($item_guid, $uguid, 'entity');
+				}
+				if($return['post']->item_type == 'marketplace:item' && com_is_active('MarketPlace')) {
+						$product = marketplace_get_product($return['post']->item_guid);
+						if($product) {
+								$item_guid = $product->cover_guid;
+						}
+				}
+
+				$likes                                = ossn_services_count_last_three_reactions_total_likes_entity($item_guid, $uguid, 'entity');
 				$return['post']->is_liked_by_user     = $likes->is_liked_by_user;
 				$return['post']->last_three_reactions = $likes->last_three_reactions;
 				$return['post']->total_likes          = $likes->total_likes;
-
 		} else {
 				$likes = $OssnLikes->CountLikes($return['post']->guid);
 				if($likes) {
