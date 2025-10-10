@@ -208,8 +208,8 @@ class OssnServices {
 						'fullname' => $user->fullname,
 						'username' => $user->username,
 						'email' => $user->email,
-						'birthdate' => $user->birthdate,
-						'gender' => $user->gender,
+						'birthdate' => isset($user->birthdate) ? $user->birthdate : '',
+						'gender' => isset($user->gender) ? $user->gender : '',
 						'is_verified_user' => $verified,
 						'icon' => array(
 							'topbar' => $user->iconURL()->topbar,
@@ -219,7 +219,7 @@ class OssnServices {
 							'large' => $user->iconURL()->large,
 						),
 						'cover_url' => $cover,
-						'language' => $user->language,
+						'language' => isset($user->language) ? $user->language : '',
 					);
 				} else {
 					return (object)array(

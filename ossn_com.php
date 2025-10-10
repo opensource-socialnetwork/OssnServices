@@ -11,7 +11,6 @@
 define('OssnServices', ossn_route()->com . 'OssnServices/');
 ossn_register_class(array(
 		'Ossn\Component\OssnServices'  => OssnServices . 'classes/OssnServices.php',
-		'Ossn\Component\Notifications' => OssnServices . 'classes/OssnNotifications.php',
 ));
 /**
  * Initialize the services component
@@ -156,7 +155,7 @@ function wall_post_total_comments($hook, $type, $return) {
 				$item         = ossn_get_object($return['post']->linkPreview);
 				$json_default = ossn_plugin_view('linkpreview/item_inner', array(
 						'item' => $item,
-						'guid' => $params['post']->guid,
+						'guid' => $return['post']->guid,
 				));
 				if(isset($item->twitter_json) || !empty($item->twitter_json)) {
 						$json = json_decode($item->twitter_json, true);

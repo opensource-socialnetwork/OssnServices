@@ -10,24 +10,25 @@
  */
 if(!com_is_active('OssnGroups')) {
 		$params['OssnServices']->throwError('201', ossn_print('ossnservices:component:notfound'));
-} 
-$guid = input('guid');
-$user = ossn_user_by_guid($guid);
-if($user){
-	$groups = ossn_get_user_groups($user);
-	if($groups){
-		$groupsl = array();
-		foreach($groups as $k => $group){
-				$groupl[$k] = new stdClass();
-				foreach($group as $r => $item){
-					$groupl[$k]->{$r} = $item;	
+}
+$guid   = input('guid');
+$user   = ossn_user_by_guid($guid);
+$groupl = '';
+if($user) {
+		$groups = ossn_get_user_groups($user);
+		if($groups) {
+				$groupl = array();
+				foreach ($groups as $k => $group) {
+						$groupl[$k] = new stdClass();
+						foreach ($group as $r => $item) {
+								$groupl[$k]->{$r} = $item;
+						}
+						$groupl[$k]->coverurl = $group->coverURL();
 				}
-				$groupl[$k]->coverurl = $group->coverURL();
 		}
-	}
-	$params['OssnServices']->successResponse(array(
-		'groups' => $groupl,											   
-	));
+		$params['OssnServices']->successResponse(array(
+				'groups' => $groupl,
+		));
 } else {
-	$params['OssnServices']->throwError('103', ossn_print('ossnservices:nouser'));	
+		$params['OssnServices']->throwError('103', ossn_print('ossnservices:nouser'));
 }
