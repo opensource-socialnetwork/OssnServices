@@ -22,6 +22,7 @@ if($user) {
 		));
 		$user_friends = false;
 		if($friends) {
+				$user_friends = array();
 				foreach ($friends as $item) {
 						$user_friends[] = $params['OssnServices']->setUser($item);
 				}

@@ -8,23 +8,25 @@
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
  * @link      https://www.opensource-socialnetwork.org/
  */
-$guid     = input('guid');
+$guid = input('guid');
 if($guid) {
 		$user = ossn_user_by_guid($guid);
 }
+$user_friends = '';
 if($user) {
-		$friends  = $user->getFriendRequests();
-		$count = 0;
+		$friends = $user->getFriendRequests();
+		$count   = 0;
 		if($friends) {
-				$count	=  count($friends);
-				foreach($friends as $item) {
+				$user_friends = array();
+				$count        = count($friends);
+				foreach ($friends as $item) {
 						$user_friends[] = $params['OssnServices']->setUser($item);
 				}
 		}
 		$params['OssnServices']->successResponse(array(
-				'count' => $count,
+				'count'    => $count,
 				'requests' => $user_friends,
-				'offset' => input('offset'),
+				'offset'   => input('offset'),
 		));
 } else {
 		$params['OssnServices']->throwError('103', ossn_print('ossnservices:nouser'));
