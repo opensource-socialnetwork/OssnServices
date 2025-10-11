@@ -12,24 +12,25 @@ if(!com_is_active('OssnGroups')) {
 		$params['OssnServices']->throwError('201', ossn_print('ossnservices:component:notfound'));
 }
 $group_guid = input('group_guid');
-$group = ossn_get_group_by_guid($group_guid);
+$group      = ossn_get_group_by_guid($group_guid);
 if(!$group) {
 		$params['OssnServices']->throwError('200', ossn_print('ossnservices:invalidgroup'));
 }
-if($group){
+$ml = '';
+if($group) {
 		$members = $group->getMembers();
 		$count   = $group->getMembers(true);
-		$ml = false;
-		if($members){
-			foreach($members as $member){
-				$ml[] = $params['OssnServices']->setUser($member);	
-			}
-		}		
+		$ml      = array();
+		if($members) {
+				foreach ($members as $member) {
+						$ml[] = $params['OssnServices']->setUser($member);
+				}
+		}
 		$params['OssnServices']->successResponse(array(
 				'members' => $ml,
-				'count' => $count,
-				'offset' => input('offset', '', 1),
-		));		
+				'count'   => $count,
+				'offset'  => input('offset', '', 1),
+		));
 } else {
 		$params['OssnServices']->throwError('103', ossn_print('ossnservices:groupnomembers'));
 }
