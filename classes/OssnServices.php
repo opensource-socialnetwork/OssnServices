@@ -93,9 +93,12 @@ class OssnServices {
 								'user/unblock',				
 								'user/blocklist',	
 								'user/delete',
+								'user/resetlogin',
 								
+								'group/list',
 								'group/delete',
 								'group/add',
+								
 								'post/edit',
 								
 								'message/send',
